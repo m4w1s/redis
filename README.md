@@ -2,6 +2,11 @@
 
 Дополненный модуль node_redis для работы с socket.io и перенаправления сообщений по процессам
 
+```js
+// подключение
+const redis = require('@devback/redis');
+```
+
 ## createEmitter([userdata])
 
 - `userdata` (object | null) данные пользователя для передачи с сообщениями
