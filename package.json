@@ -1,5 +1,5 @@
 {
-  "name": "devback-redis",
+  "name": "@devback/redis",
   "version": "1.0.0",
   "description": "Дополненный модуль node_redis для работы с socket.io и перенаправления сообщений по процессам",
   "main": "index.js",
@@ -8,15 +8,16 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/devback/redis-socketio.git"
+    "url": "git+https://github.com/devback/redis.git"
   },
   "author": "Vlad Maican",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/devback/redis-socketio/issues"
+    "url": "https://github.com/devback/redis/issues"
   },
-  "homepage": "https://github.com/devback/redis-socketio#readme",
+  "homepage": "https://github.com/devback/redis#readme",
   "dependencies": {
     "redis": "^2.8.0"
-  }
+  },
+  "devDependencies": {}
 }
