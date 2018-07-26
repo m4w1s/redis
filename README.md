@@ -20,6 +20,35 @@ const redis = require('@devback/redis');
 
 Слушает указанный канал и вызывает указанные методы с переданными данными
 
+```js
+const redis = {
+    pub: require('@devback/redis').createClient(...),
+    sub: require('@devback/redis').createClient(...)
+};
+
+redis.sub.listen('chat/global', {
+
+    message: function(userdata, data) {
+        console.log(userdata.userid); // будет 1
+
+        console.log(data.msg); // будет "Hi!"
+    }
+
+});
+
+setTimeout(function() {
+
+    let emitter = redis.pub.createEmitter({
+        userid: 1
+    });
+
+    emitter.send('chat/global', 'message', {
+        msg: 'Hi!'
+    });
+
+}, 100);
+```
+
 # RedisEmitter
 
 Класс который позволяет передавать сообщения по каналам redis с использованием методов
