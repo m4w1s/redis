@@ -1,6 +1,6 @@
 {
   "name": "@devback/redis",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Дополненный модуль node_redis для работы с socket.io и перенаправления сообщений по процессам",
   "main": "index.js",
   "scripts": {
