@@ -16,9 +16,20 @@ const redis = require('@devback/redis');
 ## listen(channel, methods)
 
 - `channel` (string) название канала
-- `methods` (object) объект где ключ название метода, а значение функция данного метода
+- `methods` (object | function) объект где ключ название метода, а значение функция данного метода или функция
 
-Слушает указанный канал и вызывает указанные методы с переданными данными
+Слушает указанный канал и вызывает указанные методы с переданными данными.<br/>
+Если вместо методов была указана функция, то первым аргументом передается метод
+
+## middleware(channel, methods)
+
+- `channel` (string) название канала
+- `methods` (object | function) объект где ключ название метода, а значение функция данного метода или функция
+
+Слушает указанный канал и устанавливает промежуточные методы или функцию
+которые/которая получает последним аргументом функцию `next` чтобы передать выполнение дальше.
+Если в `next` передать ошибку первым аргументом,
+то выполнение остановиться и будет выброшен евент `middleware-error`
 
 ```js
 const redis = {
@@ -26,6 +37,16 @@ const redis = {
     sub: require('@devback/redis').createClient(...)
 };
 
+// устанавливаем промежуточную функцию для валидации data
+redis.sub.middleware('chat/global', function(method, userdata, data, next) {
+    if(Object(data) !== data || typeof(data.msg) !== 'string') {
+        return next(new Error('Неправильный формат сообщения'));
+    }
+
+    next();
+});
+
+// если сообщение дошло до listen, значит оно прошло все промежуточные функции успешно
 redis.sub.listen('chat/global', {
 
     message: function(userdata, data) {
@@ -34,6 +55,35 @@ redis.sub.listen('chat/global', {
         console.log(data.msg); // будет "Hi!"
     }
 
+});
+
+// также можно слушать все сообщения одного канала
+redis.sub.listen('chat/global', function(method, userdata, data) {
+
+});
+
+// или устанавливать промежуточную функцию только для одного метода
+redis.sub.middleware('chat/global', {
+
+    message: function(userdata, data, next) {
+
+    }
+
+});
+
+// если одна из промежуточных функций вернула ошибку, то выбрасывается данная ошибка
+redis.sub.on('middleware-error', function(err, obj) {
+    // пример ошибки:
+    // err = 'Неправильный формат сообщения'
+    // obj = {
+    //     method: 'message',
+    //     userdata: {
+    //         userid: 1
+    //     },
+    //     data: {
+    //         msg: 'Hi!'
+    //     }
+    // }
 });
 
 setTimeout(function() {

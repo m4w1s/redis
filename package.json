@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/devback/redis#readme",
   "dependencies": {
+    "async": "^2.6.1",
     "redis": "^2.8.0"
   },
   "devDependencies": {}
